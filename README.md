@@ -1,2 +1,2 @@
-# vim
-Just my configs files
+# Dotfiles
+
