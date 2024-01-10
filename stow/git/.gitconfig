@@ -1,0 +1,139 @@
+[user]
+   name = Igor Gala
+   email = igor.gala@ringteam.com
+[core]
+    editor = nvim
+    pager = diff-highlight | less -FRX
+    commentChar = ";"
+
+[push]
+    autoSetupRemote = true
+
+[pull]
+    rebase = true
+
+[merge]
+    tool = vimdiff
+[mergetool]
+    keepBackup = false
+[mergetool "vimdiff"]
+    cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
+
+[rebase]
+    autoSquash = true
+
+[url "ssh://github.com"]
+   insteadOf = https://github.com
+
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    required = true
+    process = git-lfs filter-process
+
+[alias]
+   hist = log --graph --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]' --abbrev-commit --date=relative
+   ls = log  --graph --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate
+   ll = log --graph --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate --numstat
+   lnc = log --pretty=format:"%h\\ %s\\ [%cn]"
+   lds = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
+   ld = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
+   fl = log -u
+   dl = "!git ll -1"
+   dlc = diff --cached HEAD^
+   f = "!git ls-files | grep -i"
+   gra = "!f() { A=$(pwd) && TOPLEVEL=$(git rev-parse --show-toplevel) && cd $TOPLEVEL && git grep --full-name -In $1 | xargs -I{} echo $TOPLEVEL/{} && cd $A; }; f"
+   la = "!git config -l | grep alias | cut -c 7-"
+   lasttag = describe --tags --abbrev=0
+   lt = describe --tags --abbrev=0
+   ours = "!f() { git co --ours $@ && git add $@; }; f"
+   theirs = "!f() { git co --theirs $@ && git add $@; }; f"
+   st = status -s
+   cl = clone
+   co = checkout
+   diff = diff --word-diff
+   dc = diff --cached
+
+   a = add
+   aa = add --all
+   amend = commit --amend
+   b = branch
+   bb = branch -a
+   bc = "!f() { git branch --merged | grep -Ev '(^\\*|master|main)' | xargs -r git branch -d; }; f"
+   bd = branch -d
+   bdf = "!f() { git branch | grep -v \"^*\" | fzf --height=20% --reverse --info=inline | xargs -r git branch -d; }; f"
+   bf = "!f() { git branch | grep -v \"^*\" | fzf --height=20% --reverse --info=inline | xargs -r git checkout; }; f"
+   cherry-pit = "!f() { git rebase --rebase-merges --onto \"$1\"^ \"$1\"; }; f"
+   cm = commit -m
+   co = checkout
+   d = diff
+   ec = config --global -e
+   go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
+   l = log --relative-date --graph --abbrev-commit -10
+   la = l --all
+   ll = log --relative-date --graph --abbrev-commit
+   lla = ll --all
+   p = push
+   remotes = remote -v
+   s = status -s
+   sh = show --pretty=fuller
+
+
+[color]
+   ui = auto
+[color "branch"]
+   current = yellow reverse
+   local = yellow
+   remote = green
+[color "diff"]
+   meta = yellow bold
+   frag = magenta bold
+   old = red bold
+   new = green bold
+[color "status"]
+   added = green
+   changed = red
+   untracked = cyan
+
+# Use `origin` as the default remote on the `master` branch in all cases
+[branch "master"]
+   remote = origin
+   merge = refs/heads/master
+[filter "lfs"]
+   clean = git-lfs clean -- %f
+   smudge = git-lfs smudge -- %f
+   process = git-lfs filter-process
+   required = true
+[http]
+   postBuffer = 524288000
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+[format]
+  pretty = format:%C(yellow)%h %Cblue%>(12)%ad %Cgreen%<(7)%aN%Cred%d %Creset%s
+
+[gpg]
+  program = gpg
