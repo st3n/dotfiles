@@ -1,2 +1,2 @@
-require("igor.core")
-require("igor.lazy")
+-- bootstrap lazy.nvim, LazyVim and your plugins
+require("config.lazy")
