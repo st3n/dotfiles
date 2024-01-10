@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# remove yourself
-rm $0
-
 # install zsh
 sudo apt install -y zsh
 

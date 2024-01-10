@@ -28,7 +28,7 @@ opt.smarttab = true
 opt.breakindent = true
 opt.shiftwidth = 3
 opt.tabstop = 3
-opt.wrap = false -- No Wrap lines
+opt.wrap = true
 opt.backspace = { "start", "eol", "indent" }
 opt.path:append({ "**" }) -- Finding files - Search down into subfolders
 opt.wildignore:append({ "*/node_modules/*" })
