@@ -5,6 +5,7 @@ return {
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, {
         "clangd",
+        "pyright",
       })
     end,
   },
@@ -23,7 +24,6 @@ return {
         "python",
         "query",
         "regex",
-        "tsx",
         "typescript",
         "vim",
         "yaml",
@@ -31,32 +31,33 @@ return {
     },
   },
 
-  -- add pyright to lspconfig
-  {
-    "neovim/nvim-lspconfig",
-    ---@class PluginLspOpts
-    opts = {
-      ---@type lspconfig.options
-      servers = {
-        -- pyright will be automatically installed with mason and loaded with lspconfig
-        pyright = {},
-      },
-    },
-  },
-
-  -- lsp servers
   -- {
-  --   -- ln -s /path/to/myproject/build/compile_commands.json /path/to/myproject/
   --   "neovim/nvim-lspconfig",
   --   opts = {
-  --     inlay_hints = { enabled = true },
-  --     ---@type lspconfig.options
   --     servers = {
-  --       clangd = {},
   --       pyright = {},
-  --       cmake = {},
+  --       clangd = {},
   --     },
   --     setup = {},
   --   },
   -- },
+
+  {
+    "Civitasv/cmake-tools.nvim",
+    dependencies = { "neovim/nvim-lspconfig" },
+    require("lspconfig").clangd.setup({
+      on_new_config = function(new_config, _)
+        local status, cmake = pcall(require, "cmake-tools")
+        if status then
+          cmake.clangd_on_new_config(new_config)
+        end
+      end,
+    }),
+    keys = {
+      { "<leader>cg", "<cmd>CmakeGenerate<cr>", desc = "cmake generate" },
+      { "<leader>cb", "<cmd>CmakeBuild<cr>", desc = "cmake build" },
+      { "<leader>cc", "<cmd>CmakeClean<cr>", desc = "cmake clean" },
+      { "<leader>cq", "<cmd>CmakeClose<cr>", desc = "cmake close" },
+    },
+  },
 }
