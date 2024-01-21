@@ -12,7 +12,8 @@ return {
       {
         "<leader>r",
         function()
-          require("refactoring").select_refactor()
+          local opts = {}
+          require("refactoring").select_refactor(opts)
         end,
         mode = "v",
         noremap = true,
@@ -29,23 +30,5 @@ return {
     opts = function(_, opts)
       table.insert(opts.sources, { name = "emoji" })
     end,
-  },
-
-  {
-    "telescope.nvim",
-    dependencies = {
-      "nvim-telescope/telescope-fzf-native.nvim",
-      build = "make",
-      config = function()
-        require("telescope").load_extension("fzf")
-        require("telescope").setup({
-          pickers = {
-            colorscheme = {
-              enable_preview = true,
-            },
-          },
-        })
-      end,
-    },
   },
 }

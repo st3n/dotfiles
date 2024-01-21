@@ -4,20 +4,20 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
+      highlight = { enable = true },
+      indent = { enable = true },
       ensure_installed = {
-        "astro",
         "cmake",
         "python",
         "cpp",
+        "bash",
+        "markdown",
+        "regex",
+        "toml",
         "gitignore",
-        "go",
         "http",
         "java",
-        "php",
-        "rust",
-        "scss",
         "sql",
-        "svelte",
       },
 
       -- matchup = {
