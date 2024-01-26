@@ -2,30 +2,23 @@ return {
   {
     "telescope.nvim",
     dependencies = {
-      "nvim-telescope/telescope-fzf-native.nvim",
-      build = "make",
-      config = function()
-        require("telescope").load_extension("fzf")
-        require("telescope").setup({
-          pickers = {
-            colorscheme = {
-              enable_preview = true,
-            },
-          },
-        })
-      end,
-    },
-  },
-  {
-    "telescope.nvim",
-    dependencies = {
-      "debugloop/telescope-undo.nvim",
-      keys = { { "<leader>U", "<cmd>Telescope undo<cr>" } },
-      config = function()
-        require("telescope").load_extension("undo")
-      end,
+      {
+        "nvim-telescope/telescope-fzf-native.nvim",
+        build = "make",
+        config = function()
+          require("telescope").load_extension("fzf")
+        end,
+      },
+      {
+        "debugloop/telescope-undo.nvim",
+        keys = { { "<leader>U", "<cmd>Telescope undo<cr>" } },
+        config = function()
+          require("telescope").load_extension("undo")
+        end,
+      },
     },
     keys = {
+      { "<leader>U", "<cmd>Telescope undo<cr>" },
       {
         "<leader>fp",
         function()
@@ -59,6 +52,11 @@ return {
       },
     },
     opts = {
+      pickers = {
+        colorscheme = {
+          enable_preview = true,
+        },
+      },
       defaults = {
         layout_strategy = "horizontal",
         layout_config = {
@@ -68,11 +66,28 @@ return {
           },
           width = 0.8,
           height = 0.8,
-          preview_cutoff = 120,
+          preview_cutoff = 9999,
         },
         sorting_strategy = "ascending",
         winblend = 0,
       },
     },
+    config = function()
+      require("telescope").setup({})
+    end,
+  },
+  {
+    "nvim-telescope/telescope-file-browser.nvim",
+    dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+    keys = {
+      {
+        "<leader>fB",
+        ":Telescope file_browser path=%:p:h=%:p:h<cr>",
+        desc = "Browse files",
+      },
+    },
+    config = function()
+      require("telescope").load_extension("file_browser")
+    end,
   },
 }

@@ -18,7 +18,10 @@ return {
         "http",
         "java",
         "sql",
+        "vimdoc",
       },
+      sync_install = false,
+      auto_instal = true,
 
       -- matchup = {
       -- 	enable = true,

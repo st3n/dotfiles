@@ -24,11 +24,13 @@ return {
     opts = {},
   },
 
+  --[[
   {
-    "nvim-cmp",
-    dependencies = { "hrsh7th/cmp-emoji" },
-    opts = function(_, opts)
-      table.insert(opts.sources, { name = "emoji" })
-    end,
+    "folke/flash.nvim",
+    keys = {
+      { "s", mode = { "n", "x", "o" }, false },
+      { "S", mode = { "n", "x", "o" }, false },
+    },
   },
+   --]]
 }

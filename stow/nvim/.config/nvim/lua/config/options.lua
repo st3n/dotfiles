@@ -26,8 +26,8 @@ opt.inccommand = "split"
 opt.ignorecase = true -- Case insensitive searching UNLESS /C or capital in search
 opt.smarttab = true
 opt.breakindent = true
-opt.shiftwidth = 3
-opt.tabstop = 3
+opt.shiftwidth = 2
+opt.tabstop = 2
 opt.wrap = true
 opt.backspace = { "start", "eol", "indent" }
 opt.path:append({ "**" }) -- Finding files - Search down into subfolders

@@ -1,73 +1,91 @@
 return {
-  -- tools
-  { "folke/neoconf.nvim", cmd = "Neoconf", config = true, dependencies = { "nvim-lspconfig" } },
+  {
+    "folke/neodev.nvim",
+    opts = {
+      experimental = {
+        pathStrict = true,
+      },
+
+      library = {
+        runtime = "~/projects/neovim/runtime/",
+      },
+    },
+  },
 
   {
     "williamboman/mason.nvim",
+    dependencies = {
+      "williamboman/mason-lspconfig.nvim",
+    },
+    config = function()
+      require("mason").setup()
+      require("mason-lspconfig").setup()
+    end,
+    lazy = false,
+    opts = {},
+  },
+
+  {
+    "williamboman/mason-lspconfig.nvim",
+    dependencies = {
+      "j-hui/fidget.nvim",
+    },
     opts = {
       ensure_installed = {
         "clangd",
         "pyright",
+        "lua_ls",
+        "stylua",
+        "selene",
+        "luacheck",
+        "shellcheck",
+        "shfmt",
       },
+
+      auto_install = true,
     },
+
+    config = function()
+      require("fidget").setup({})
+    end,
   },
 
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = {
-      ensure_installed = {
-        "bash",
-        "html",
-        "javascript",
-        "json",
-        "lua",
-        "markdown",
-        "markdown_inline",
-        "python",
-        "query",
-        "regex",
-        "typescript",
-        "vim",
-        "yaml",
-      },
-    },
-  },
   -- lsp servers
   {
     "neovim/nvim-lspconfig",
+    dependencies = {
+      -- the rest defined in lazyvim lsp
+      "hrsh7th/cmp-nvim-lsp",
+      "Civitasv/cmake-tools.nvim",
+    },
+
     opts = {
-      diagnostics = { virtual_text = { prefix = "icons" } },
+      diagnostics = {
+        virtual_text = { prefix = "icons" },
+        update_in_insert = true,
+        float = {
+          focusable = false,
+          style = "minimal",
+          border = "rounded",
+          source = "always",
+          header = "",
+          prefix = "",
+        },
+      },
+
       inlay_hints = { enabled = true },
+
       capabilities = {
+        offsetEncoding = { "utf-16" },
         workspace = {
           didChangeWatchedFiles = {
             dynamicRegistration = false,
           },
         },
       },
+
       ---@type lspconfig.options
       servers = {
-        ansiblels = {},
-        bashls = {},
-        clangd = {},
-        dockerls = {},
-        html = {},
-        marksman = {},
-        pyright = {
-          enabled = true,
-        },
-        -- rust_analyzer = {
-        -- settings = {
-        --   ["rust-analyzer"] = {
-        --     procMacro = { enable = true },
-        --     cargo = { allFeatures = true },
-        --     checkOnSave = {
-        --       command = "clippy",
-        --       extraArgs = { "--no-deps" },
-        --     },
-        --   },
-        -- },
-        -- },
         yamlls = {
           settings = {
             yaml = {
@@ -79,9 +97,6 @@ return {
           single_file_support = true,
           settings = {
             Lua = {
-              workspace = {
-                checkThirdParty = false,
-              },
               completion = {
                 workspaceWord = true,
                 callSnippet = "Both",
@@ -107,6 +122,8 @@ return {
                 castNumberToInteger = true,
               },
               diagnostics = {
+
+                globals = { "vim" },
                 disable = { "incomplete-signature-doc", "trailing-space" },
                 -- enable = false,
                 groupSeverity = {
@@ -140,31 +157,70 @@ return {
             },
           },
         },
-        vimls = {},
+
+        clangd = {
+          single_file_support = true,
+          mason = false,
+          cmd = {
+            "clangd",
+            "--background-index",
+            "--clang-tidy",
+            "--compile-commands-dir=/code/.clang-build",
+            "--function-arg-placeholders",
+            "--completion-style=detailed",
+            "--fallback-style=Google",
+            "--header-insertion=iwyu",
+            "--j=4",
+            "--malloc-trim",
+            "--pch-storage=memory",
+          },
+          filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
+        },
       },
 
-      setup = {},
+      setup = {
+        --   clangd = function(server, opts)
+        --     clangd_on_new_config = function(new_config, _)
+        --       local status, cmake = pcall(require, "cmake-tools")
+        --       if status then
+        --         cmake.clangd_on_new_config(new_config)
+        --       end
+        --     end
+        --     return false
+        --   end,
+
+        ["*"] = function(server, opts)
+          local capabilities = require("cmp_nvim_lsp").default_capabilities()
+          require("lspconfig")[server].setup({
+            capabilities = capabilities,
+            server = opts,
+          })
+          return false
+        end,
+      },
+    },
+  },
+
+  {
+    "p00f/clangd_extensions.nvim",
+    opts = {
+      inlay_hints = {
+        inline = true,
+      },
     },
   },
 
   {
     "Civitasv/cmake-tools.nvim",
-    dependencies = {
-      { "neovim/nvim-lspconfig" },
-    },
-    require("lspconfig").clangd.setup({
-      on_new_config = function(new_config, _)
-        local status, cmake = pcall(require, "cmake-tools")
-        if status then
-          cmake.clangd_on_new_config(new_config)
-        end
-      end,
-    }),
-    keys = {
-      { "<leader>cg", "<cmd>CmakeGenerate<cr>", desc = "cmake generate" },
-      { "<leader>cb", "<cmd>CmakeBuild<cr>", desc = "cmake build" },
-      { "<leader>cc", "<cmd>CmakeClean<cr>", desc = "cmake clean" },
-      { "<leader>cq", "<cmd>CmakeClose<cr>", desc = "cmake close" },
+
+    opts = {
+      keys = {
+        { "<leader>cg", "<cmd>CmakeGenerate<cr>", desc = "cmake generate" },
+        { "<leader>cb", "<cmd>CmakeBuild<cr>", desc = "cmake build" },
+        { "<leader>cc", "<cmd>CmakeClean<cr>", desc = "cmake clean" },
+        { "<leader>cq", "<cmd>CmakeClose<cr>", desc = "cmake close" },
+      },
+      build_directory = "../build",
     },
   },
 
