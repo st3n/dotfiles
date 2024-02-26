@@ -165,7 +165,11 @@ return {
             "clangd",
             "--background-index",
             "--clang-tidy",
-            "--compile-commands-dir=/code/.clang-build",
+            "--compile-commands-dir=build",
+            "--query-driver=/home/igor/repo/sheila/build/tmp/work/aarch64-poky-linux/onvif-adapter/1.0.0-r0/recipe-sysroot-native/usr/bin/aarch64-poky-linux/aarch64-poky-linux-g*",
+
+            -- /home/igor/repo/sheila/build/tmp/work/aarch64-poky-linux/onvif-adapter/1.0.0-r0/recipe-sysroot/usr/include/c++/9.2.0                                                                                                      --         /-2,0s
+            "--enable-config",
             "--function-arg-placeholders",
             "--completion-style=detailed",
             "--fallback-style=Google",
@@ -173,21 +177,22 @@ return {
             "--j=4",
             "--malloc-trim",
             "--pch-storage=memory",
+            "--log=verbose",
           },
           filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
         },
       },
 
       setup = {
-        --   clangd = function(server, opts)
-        --     clangd_on_new_config = function(new_config, _)
-        --       local status, cmake = pcall(require, "cmake-tools")
-        --       if status then
-        --         cmake.clangd_on_new_config(new_config)
-        --       end
-        --     end
-        --     return false
-        --   end,
+        clangd = function(server, opts)
+          clangd_on_new_config = function(new_config, _)
+            local status, cmake = pcall(require, "cmake-tools")
+            if status then
+              cmake.clangd_on_new_config(new_config)
+            end
+          end
+          return false
+        end,
 
         ["*"] = function(server, opts)
           local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -220,7 +225,12 @@ return {
         { "<leader>cc", "<cmd>CmakeClean<cr>", desc = "cmake clean" },
         { "<leader>cq", "<cmd>CmakeClose<cr>", desc = "cmake close" },
       },
-      build_directory = "../build",
+      build_directory = "~/repo/sheila/build/tmp/work/aarch64-poky-linux/onvif-adapter/1.0.0-r0/build",
+      require("cmake-tools").setup({
+        cmake_soft_link_compile_commands = false, -- this will automatically make a soft link from compile commands file to project root dir
+        cmake_compile_commands_from_lsp = true, -- this will automatically set compile commands file location using lsp, to use it, please set `cmake_soft_link_compile_commands` to false
+        cmake_kits_path = "~/repo/sheila/cmake-kits.json",
+      }),
     },
   },
 

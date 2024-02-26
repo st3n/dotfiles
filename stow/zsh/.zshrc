@@ -111,8 +111,8 @@ source $ZSH/oh-my-zsh.sh
 source $FORGIT_INSTALL_DIR/completions/git-forgit.zsh
 export PATH="$PATH:$FORGIT_INSTALL_DIR/bin"
 
-if [ -f "$HOME/.bash_aiases" ] ; then
-  source  "$HOME/.bash_aiases"
+if [ -f "$HOME/.bash_aliases" ] ; then
+  source  "$HOME/.bash_aliases"
 fi
 
 # {{{1 Bindings

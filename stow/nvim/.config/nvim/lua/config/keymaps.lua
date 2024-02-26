@@ -67,9 +67,11 @@ keymap.set("n", "<leader>r", function()
   require("igor.hsl").replaceHexWithHSL()
 end)
 
-keymap.set(
-  "n",
-  "<leader>sx",
-  require("telescope.builtin").resume,
-  { noremap = true, silent = true, desc = "Resume previous search" }
-)
+if not vim.g.vscode then
+  keymap.set(
+    "n",
+    "<leader>sx",
+    require("telescope.builtin").resume,
+    { noremap = true, silent = true, desc = "Resume previous search" }
+  )
+end
