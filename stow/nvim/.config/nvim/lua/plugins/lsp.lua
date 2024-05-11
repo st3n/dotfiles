@@ -60,6 +60,7 @@ return {
     },
 
     opts = {
+      autoformat = false,
       diagnostics = {
         virtual_text = { prefix = "icons" },
         update_in_insert = true,
