@@ -1,25 +1,5 @@
 #!/usr/bin/env zsh
 
-# Ctrl-F (Find in Files)
-RG_PREFIX='rg --column --line-number --no-heading --color=always --smart-case '
-INITIAL_QUERY=''
-FZF_DEFAULT_COMMAND="$RG_PREFIX '$INITIAL_QUERY' $PWD"
-
-__fif() {
-    fzf --bind "change:reload:$RG_PREFIX {q} $PWD || true" --ansi --phony --query "$INITIAL_QUERY" | cut -d ':' -f1
-}
-
-find-in-files() {
-  LBUFFER="${LBUFFER}$(__fif)"
-  local ret=$?
-  zle reset-prompt
-  return $ret
-}
-
-zle -N find-in-files
-bindkey '^f' find-in-files
-
-
 #dynamically perform different actions depending on the state
 fifp() {
 fd --type file |
@@ -30,21 +10,6 @@ fd --type file |
               echo "change-prompt(Directories> )+reload(fd --type directory)"' \
       --preview '[[ {fzf:prompt} =~ Files ]] && bat --color=always {} || tree -C {}'
 }
-
-
-# 1. Search for text in files using Ripgrep
-# 2. Interactively narrow down the list using fzf
-# 3. Open the file in Vim
-fife() {
-   rg --color=always --line-number --no-heading --smart-case "${*:-}" |
-      fzf --ansi \
-         --color "hl:-1:underline,hl+:-1:underline:reverse" \
-         --delimiter : \
-         --preview 'bat --color=always {1} --highlight-line {2}' \
-         --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
-         --bind 'enter:become(vim {1} +{2})'
-}
-
 
 # Two-phase filtering with Ripgrep and fzf
 #
@@ -67,5 +32,7 @@ fifi() {
       --header '╱ CTRL-R (ripgrep mode) ╱ CTRL-F (fzf mode) ╱' \
       --preview 'bat --color=always {1} --highlight-line {2}' \
       --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
-      --bind 'enter:become(vim {1} +{2})'
+      --bind 'enter:become(nvim {1} +{2})'
  }
+
+
