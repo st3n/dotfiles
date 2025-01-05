@@ -24,7 +24,8 @@ setopt EXTENDED_GLOB        # Use extended globbing syntax.
 # +---------+
 
 setopt EXTENDED_HISTORY          # Write the history fie in the ':start:elapsed;command' format.
-#setopt SHARE_HISTORY             # Share history between al sessions.
+#setopt # Share history between al sessions.
+unsetopt SHARE_HISTORY
 setopt HIST_EXPIRE_DUPS_FIRST    # Expire a dupicate event first when trimming history.
 setopt HIST_IGNORE_DUPS          # Do not record an event that was just recorded again.
 setopt HIST_IGNORE_ALL_DUPS      # Delete an old recorded event if a new event is a duplicate.
@@ -62,21 +63,20 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 plugins=(
 	#coorize
-   fzf
-   fzf-tab
-   forgit # fzf git
+	fzf
+	fzf-tab
+	forgit # fzf git
 	zsh-z
-   z
+	z
 	zsh-autosuggestions
 	fast-syntax-highlighting
-   ripgrep
 	extract
 	cp
-   repo
-   timer
+	repo
+	timer
 )
 
-export PATH=$HOME/.local/bin/:$PATH
+export PATH=$HOME/.local/bin/:$HOME/.cargo/bin:$HOME/scripts/:$PATH
 
 export LANG=en_US.UTF-8
 
@@ -88,9 +88,12 @@ fi
 export PS_FORMAT='pid,ppid,user,pri,ni,vsz,rss,pcpu,pmem,tty,stat,args'
 
 # fzf setup
-export FZF_BASE=$HOME/tools/fzf # all initialized by zsg fzf plugin
+#export FZF_BASE=$HOME/tools/fzf # all initialized by zsh fzf plugin
+source $HOME/.config/fzf/fzf_setup.zsh
+source $HOME/.config/fzf/find_files.zsh
+source $HOME/.config/fzf/find_in_files.zsh
 source $HOME/.config/fzf/fif.zsh
-source $HOME/.config/fzf/fzf_igor.zsh
+#source $HOME/tools/udocker/udocker.sh
 
 # zsh-autosuggestions
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion match_prev_cmd)
@@ -144,4 +147,12 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
 # switch group using `,` and `.`
 zstyle ':fzf-tab:*' switch-group ',' '.'
 
+SCRIPTS_DIR="$HOME/scripts/init"
+for script in "$SCRIPTS_DIR"/*.sh ~/.config/fzf/*.bash; do
+  if [ -f "$script" ] && [ -r "$script" ]; then
+    emulate ksh -c ". $script"
+  fi
+done
+
+export UBNT_MIDDLEWARE_LOCAL=on
 

@@ -1,10 +1,12 @@
 [user]
-   name = Igor Gala
-   email = igor.gala@ringteam.com
+	name = Igor Gala
+	email = igor.gala@ui.com
+	signingkey = /home/igor/.ssh/ui.pub
 [core]
     editor = nvim
     pager = diff-highlight | less -FRX
     commentChar = ";"
+	  excludesFile = ~/.gitignore
 
 [push]
     autoSetupRemote = true
@@ -32,19 +34,19 @@
     process = git-lfs filter-process
 
 [alias]
-   hist = log --graph --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]' --abbrev-commit --date=relative
-   ls = log  --graph --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate
+   hist = log --graph --pretty=format:'%Cred%h%Creset %s %C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)[%an]%Creset' --abbrev-commit --date=relative
+   ls = log --graph --pretty=format:"%C(green)%h\\ %C(yellow)%ad\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
    ll = log --graph --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate --numstat
-   lnc = log --pretty=format:"%h\\ %s\\ [%cn]"
-   lds = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
    ld = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
    fl = log -u
+   l = log --relative-date --graph --abbrev-commit -10
+   lla = "!git ll --all"
+   la = "!git l --all"
    dl = "!git ll -1"
    dlc = diff --cached HEAD^
    f = "!git ls-files | grep -i"
-   gra = "!f() { A=$(pwd) && TOPLEVEL=$(git rev-parse --show-toplevel) && cd $TOPLEVEL && git grep --full-name -In $1 | xargs -I{} echo $TOPLEVEL/{} && cd $A; }; f"
+   gra = "!f() { A=$(pwd) && TOPLEVEL=$(git rev-parse --show-toplevel) && cd $TOPLEVEL && git grep --full-name -In $-1 | xargs -I{} echo $TOPLEVEL/{} && cd $A; }; f"
    la = "!git config -l | grep alias | cut -c 7-"
-   lasttag = describe --tags --abbrev=0
    lt = describe --tags --abbrev=0
    ours = "!f() { git co --ours $@ && git add $@; }; f"
    theirs = "!f() { git co --theirs $@ && git add $@; }; f"
@@ -57,7 +59,7 @@
    a = add
    aa = add --all
    amend = commit --amend
-   b = branch
+   br = branch
    bb = branch -a
    bc = "!f() { git branch --merged | grep -Ev '(^\\*|master|main)' | xargs -r git branch -d; }; f"
    bd = branch -d
@@ -65,19 +67,47 @@
    bf = "!f() { git branch | grep -v \"^*\" | fzf --height=20% --reverse --info=inline | xargs -r git checkout; }; f"
    cherry-pit = "!f() { git rebase --rebase-merges --onto \"$1\"^ \"$1\"; }; f"
    cm = commit -m
-   co = checkout
    d = diff
    ec = config --global -e
    go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
-   l = log --relative-date --graph --abbrev-commit -10
-   la = l --all
-   ll = log --relative-date --graph --abbrev-commit
-   lla = ll --all
    p = push
    remotes = remote -v
    s = status -s
    sh = show --pretty=fuller
+    ; latest = "!f() { echo "Latest \"${1:-11}\" commits accross all branches:"; git log  --abbrev-commit --date=relative --branches --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset%n' -n ${1:-11};  } ; f"
+	; lg = "!lg() { git log -n ${1:-5} --abbrev-commit; } ; lg"
+	 qshow = show -q
+	 push-force = push --force-with-lease --force-if-includes
+	 push-upstream = !git push --set-upstream origin $(git symbolic-ref --short HEAD)
+	 meld = difftool -t meld --dir-diff
+	 serve = daemon --verbose --export-all --base-path=.git --reuseaddr --strict-paths .git/
 
+    # show commits between two changesets
+   #log-commits = "!git log --oneline --ancestry-path"
+    ; log-br = "!log_branch_commits() { base=${1:-develop}; $(git merge-base $base $(git branch --show-current))..$(git branch --show-current)"
+   #log-br = "!f() { base=${1:-develop};  git log-commits $(git merge-base develop $(git branch --show-current))..$(git branch --show-current); }; f"
+
+  # cherry-pick all commits of the specified branch
+   cherry-pick-br = "!cherry_pick_br() { br=${1}; base_br=${2:-develop}; git cherry-pick $(git merge-base ${base_br} ${br})..${br}; } ; cherry_pick_br"
+
+  # Rebase onto origin/${1:-develop} and test by push --dry-run
+    rebase-and-push = "!f() { tgt_branch=${1:-develop}; git pull origin || git branch --set-upstream-to=origin/$(git rev-parse --abbrev-ref HEAD) && git fetch origin && git rebase origin/${tgt_branch} && git branch --set-upstream-to=origin/$(git rev-parse --abbrev-ref HEAD) && git push -n --force-with-lease --force-if-includes && git push --force-with-lease --force-if-includes; }; f"
+
+    tag-ui = "!f() {\
+							local today=${1:-$(date +%Y%m%d)}; \
+							local known_builds='fcd prld urc shipping'; \
+							local current_branch=$(git rev-parse --abbrev-ref HEAD); \
+							local current_build=$(echo $current_branch | awk -F/ '{print $1}'); \
+							local current_model=$(echo $current_branch | awk -F/ '{print $2}'); \
+							\
+							if ! echo $known_builds | grep $current_build > /dev/null 2>&1; then \
+								echo \"Current build $current_build. Not known builds $known_builds\"; \
+								return ; \
+							fi; \
+    					\
+							echo \"Tag $current_branch-$today\"; \
+							git tag \"$current_branch-$today\"; \
+ 	 	 	 	 	 }; f"
 
 [color]
    ui = auto
@@ -107,33 +137,12 @@
 [http]
    postBuffer = 524288000
 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
 [format]
-  pretty = format:%C(yellow)%h %Cblue%>(12)%ad %Cgreen%<(7)%aN%Cred%d %Creset%s
+  #pretty = format:%C(yellow)%h %Cblue%>(12)%ad %Cgreen%<(7)%aN%Cred%d %Creset%s
 
 [gpg]
   program = gpg
+	format = ssh
+[commit]
+	gpgsign = true
