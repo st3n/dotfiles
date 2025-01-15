@@ -1,10 +1,9 @@
 [user]
 	name = Igor Gala
-	email = igor.gala@ui.com
-	signingkey = /home/igor/.ssh/ui.pub
+	email = igor.gala89@gmail.com
 [core]
     editor = nvim
-    pager = diff-highlight | less -FRX
+	pager = perl /usr/share/git-core/contrib/diff-highlight | less
     commentChar = ";"
 	  excludesFile = ~/.gitignore
 
@@ -145,4 +144,6 @@
   program = gpg
 	format = ssh
 [commit]
-	gpgsign = true
+	gpgSign = false
+[interactive]
+	difffilter = perl /usr/share/git-core/contrib/diff-highlight
