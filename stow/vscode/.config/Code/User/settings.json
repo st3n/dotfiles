@@ -263,6 +263,7 @@
   "files.autoSave": "onWindowChange",
   "editor.fontFamily": "SourceCodePro",
   "editor.cursorBlinking": "solid",
+  "editor.cursorSurroundingLines": 8,
   "editor.find.autoFindInSelection": "multiline",
   "files.trimTrailingWhitespace": true,
   "files.trimFinalNewlines": true,
@@ -300,5 +301,8 @@
   "git.supportCancellation": true,
   "settingsSync.ignoredExtensions": [
   ],
-  "workbench.preferredDarkColorTheme": "Soft Colors"
+  "workbench.preferredDarkColorTheme": "Soft Colors",
+  "workbench.preferredLightColorTheme": "Soft Colors",
+
+  "vim.smartRelativeLine": true
 }

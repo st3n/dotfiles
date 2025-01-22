@@ -111,7 +111,7 @@ source $ZSH/oh-my-zsh.sh
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # shoud be after oh-my-zsh initialization
-source $FORGIT_INSTALL_DIR/completions/git-forgit.zsh
+#source $FORGIT_INSTALL_DIR/completions/git-forgit.zsh
 export PATH="$PATH:$FORGIT_INSTALL_DIR/bin"
 
 if [ -f "$HOME/.bash_aliases" ] ; then
@@ -147,12 +147,12 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
 # switch group using `,` and `.`
 zstyle ':fzf-tab:*' switch-group ',' '.'
 
-SCRIPTS_DIR="$HOME/scripts/init"
-for script in "$SCRIPTS_DIR"/*.sh ~/.config/fzf/*.bash; do
-  if [ -f "$script" ] && [ -r "$script" ]; then
-    emulate ksh -c ". $script"
-  fi
-done
+#SCRIPTS_DIR="$HOME/scripts/init"
+#for script in "$SCRIPTS_DIR"/*.sh ~/.config/fzf/*.bash; do
+#  if [ -f "$script" ] && [ -r "$script" ]; then
+#    emulate ksh -c ". $script"
+#  fi
+#done
 
 export UBNT_MIDDLEWARE_LOCAL=on
 

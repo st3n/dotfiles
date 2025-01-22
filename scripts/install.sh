@@ -59,3 +59,9 @@ TARGET=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/${GITHUB_REPO}
 git clone --depth=1 ${SOURCE} ${TARGET}
 
 #--------------
+
+git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
+git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git \
+  ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
+  
+git clone https://github.com/wfxr/forgit.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/forgit
