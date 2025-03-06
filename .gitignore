@@ -1,1 +1,16 @@
 .DS_Store
+
+stow/nvim/.config/nvim/lazy-lock.json
+stow/nvim/.config/nvim/lazyvim.json
+
+stow/tmux/.config/tmux/plugins/*
+
+# Do not ignore the User directory itself
+!stow/vscode/.config/Code/User/*
+
+# Ignore everything inside Code/
+stow/vscode/.config/Code/*
+
+# Ignore all directories inside User
+stow/vscode/.config/Code/User/*/
+

@@ -274,9 +274,6 @@
   },
   "zenMode.hideLineNumbers": false,
   "workbench.iconTheme": "vscode-icons",
-  "[cpp]": {
-    "editor.defaultFormatter": "ms-vscode.cpptools"
-  },
 
   "black-formatter.importStrategy" : "fromEnvironment",
   "black-formatter.path" : ["black"],
@@ -286,23 +283,55 @@
     "editor.insertSpaces": true,
     "editor.tabSize": 4
   },
-  "cmake.automaticReconfigure": false,
   "cmake.autoSelectActiveFolder": false,
   "cmake.configureOnEdit": false,
   "cmake.loadCompileCommands": false,
-  "cmake.showSystemKits": false,
   "cmake.environment": {
     "IS_YOCTO": "false"
   },
-  "editor.formatOnPaste": true,
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "ms-python.black-formatter",
   "editor.fontSize": 14,
   "git.supportCancellation": true,
   "settingsSync.ignoredExtensions": [
   ],
   "workbench.preferredDarkColorTheme": "Soft Colors",
   "workbench.preferredLightColorTheme": "Soft Colors",
-
-  "vim.smartRelativeLine": true
+  "vim.smartRelativeLine": true,
+  "[cpp]": {
+    "editor.defaultFormatter": "xaver.clang-format"
+  },
+  "[c]": {
+    "editor.defaultFormatter": "xaver.clang-format"
+  },
+  "editor.formatOnPaste": false,
+  "editor.formatOnSave": false,
+  "C_Cpp.clang_format_style": "file",
+  "C_Cpp.clang_format_fallbackStyle": "Google",
+  "editor.formatOnType": false,
+  "cmake.pinnedCommands": [
+    "workbench.action.tasks.configureTaskRunner",
+    "workbench.action.tasks.runTask"
+  ],
+  "gulp.autoDetect": "on",
+  "cmake.toolset": "",
+  "cmake.options.advanced": {
+    "configure": {},
+    "build": {
+      "statusBarVisibility": "inherit",
+      "inheritDefault": "visible"
+    },
+    "launch": {
+      "statusBarVisibility": "inherit",
+      "inheritDefault": "visible"
+    },
+    "debug": {
+      "statusBarVisibility": "inherit",
+      "inheritDefault": "visible"
+    }
+  },
+  "cmake.showOptionsMovedNotification": false,
+  "makefile.configureOnOpen": true,
+  "hexeditor.columnWidth": 18,
+  "hexeditor.showDecodedText": true,
+  "hexeditor.defaultEndianness": "little",
+  "hexeditor.inspectorType": "aside",
 }

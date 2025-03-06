@@ -3,7 +3,7 @@ Host github.com
 	ControlPersist 120
 	HostName github.com
        User git
-       IdentityFile ~/.ssh/dell_ed25519
+       IdentityFile ~/.ssh/github_beast
        AddKeysToAgent yes
 
 Host *

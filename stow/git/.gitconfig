@@ -147,3 +147,5 @@
 	gpgSign = false
 [interactive]
 	difffilter = perl /usr/share/git-core/contrib/diff-highlight
+[init]
+	defaultBranch = main
