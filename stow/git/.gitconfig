@@ -154,3 +154,5 @@
 	difffilter = perl /usr/share/git-core/contrib/diff-highlight
 [init]
 	defaultBranch = main
+[url "git@github-nasa47:"]
+	insteadOf = git@github.com:NASA47/
