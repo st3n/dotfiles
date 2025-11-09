@@ -1,31 +1,33 @@
 #!/usr/bin/env zsh
 
-# Default preview with conditional checks for directories and files
-export DEFAULT_PREVIEW='{ [[ -d {} ]] && exa -lF --group-directories-first --color=always {}; } || { batcat -n --color=always {} || cat {}; }'
+# Use bat consistently
+alias bat='batcat'
 
-export FZF_DEFAULT_OPTS="--height 80% --border --multi --inline-info \
---preview='[[ \$(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || cat {}) 2>/dev/null | head -500' \
---preview-window='right:hidden:wrap' \
---bind='ctrl-o:execute(nvim {} || less -f {}),ctrl-p:toggle-preview,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-a:select-all+accept,ctrl-y:execute-silent(echo {+} | pbcopy)'"
+# Default preview
+export DEFAULT_PREVIEW='{ [[ -d {} ]] && exa -lF --group-directories-first --color=always "{}"; } || { bat --style=numbers --color=always "{}" || cat "{}"; }'
 
-# FD options for finding files
+# Safe SEARCH_DEFAULT
 export FD_OPTIONS="--strip-cwd-prefix --follow --exclude .git --exclude node_modules"
-export SEARCH_DEFAULT="git ls-files --cached --others --exclude-standard || fd --type f --type l --hidden -I $FD_OPTIONS"
-export FZF_DEFAULT_COMMAND="$SEARCH_DEFAULT"
+export FD_OPTIONS2="--strip-cwd-prefix --follow --exclude node_modules"
+export FZF_DEFAULT_COMMAND="fdfind --type f --type l --hidden -I $FD_OPTIONS2"
+# export FZF_DEFAULT_COMMAND='bash -c "git ls-files --cached --others --exclude-standard 2>/dev/null || fdfind --type f --type l --hidden -I $FD_OPTIONS"'
 
-# Set up `fzf` commands and aliases
-alias fzfcl="export FZF_DEFAULT_COMMAND='fd .'"
-alias fzf-="export FZF_DEFAULT_COMMAND='$SEARCH_DEFAULT'"
+# FZF options
 
-# Preview commands for various fzf bindings
+export FZF_DEFAULT_OPTS='
+--height 80% --border --multi --inline-info
+--preview "if file --mime {} | grep -q binary; then echo {} is a binary file; else (bat --style=numbers --color=always {} || cat {}); fi 2>/dev/null | head -500"
+--preview-window="right:hidden:wrap"
+--bind "ctrl-o:execute(nvim {} || less -f {}),ctrl-p:toggle-preview,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-a:select-all+accept,ctrl-y:execute-silent(echo {+} | pbcopy)"
+'
+
+# CTRL-T
 export FZF_CTRL_T_COMMAND="rg --files --no-ignore --hidden --follow --glob '!.git/*'"
-export FZF_CTRL_T_OPTS=" \
---walker-skip .git \
---preview '([ -f {} ] && (bat --style=numbers --color=always {} || cat {})) || ([ -d {} ] && (tree -C {} | less))' \
---bind '?:toggle-preview'"
+export FZF_CTRL_T_OPTS="--preview '([ -f "{}" ] && (bat --style=numbers --color=always "{}" || cat "{}")) || ([ -d "{}" ] && tree -C -L 2 "{}")' --bind '?:toggle-preview'"
 
+# ALT-C
 export FZF_ALT_C_COMMAND="fd --type d --hidden --strip-cwd-prefix"
-export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
+export FZF_ALT_C_OPTS="--preview 'tree -C -L 2 "{}"'"
 
 # Custom functions and commands for history, file navigation, etc.
 fman() {

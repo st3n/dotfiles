@@ -3,9 +3,14 @@
 	email = igor.gala89@gmail.com
 [core]
     editor = nvim
-	pager = perl /usr/share/git-core/contrib/diff-highlight | less
     commentChar = ";"
 	  excludesFile = ~/.gitignore
+
+[pager]
+  # Use `diffr` (make sure it is installed).
+  log = diffr | less
+  show = diffr | less
+  diff = diffr | less
 
 [push]
     autoSetupRemote = true

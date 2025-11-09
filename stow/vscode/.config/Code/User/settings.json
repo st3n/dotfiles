@@ -334,4 +334,5 @@
   "hexeditor.showDecodedText": true,
   "hexeditor.defaultEndianness": "little",
   "hexeditor.inspectorType": "aside",
+  "mdb.mcp.server": "prompt",
 }
