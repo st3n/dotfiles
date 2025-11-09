@@ -1,5 +1,9 @@
 #!/usr/bin/env zsh
 
+export PATH="$PATH:$HOME/bin:$HOME/.local/bin:/usr/local/bin:/opt/nvim-linux-x86_64/bin"
+export PATH=$HOME/.cargo/bin:$HOME/scripts/:$PATH
+export ARCHFLAGS="-arch $(uname -m)"
+
 setopt GLOB_DOTS
 # alow more sophisticated glob patterns
 setopt EXTENDEDGLOB
@@ -62,10 +66,10 @@ ENABLE_CORRECTION="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 plugins=(
-	#coorize
+	#colorize
 	fzf
 	fzf-tab
-	forgit # fzf git
+	forgit
 	zsh-z
 	z
 	zsh-autosuggestions
@@ -76,7 +80,8 @@ plugins=(
 	timer
 )
 
-export PATH=$HOME/.local/bin/:$HOME/.cargo/bin:$HOME/scripts/:$PATH
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export LANG=en_US.UTF-8
 
@@ -88,7 +93,7 @@ fi
 export PS_FORMAT='pid,ppid,user,pri,ni,vsz,rss,pcpu,pmem,tty,stat,args'
 
 # fzf setup
-#export FZF_BASE=$HOME/tools/fzf # all initialized by zsh fzf plugin
+export FZF_BASE=$HOME/.fzf
 source $HOME/.config/fzf/fzf_setup.zsh
 source $HOME/.config/fzf/find_files.zsh
 source $HOME/.config/fzf/find_in_files.zsh
@@ -154,5 +159,15 @@ zstyle ':fzf-tab:*' switch-group ',' '.'
 #  fi
 #done
 
-export UBNT_MIDDLEWARE_LOCAL=on
+# DISABLE_MAGIC_FUNCTIONS="true"
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
+# - $ZSH_CUSTOM/aliases.zsh
+# - $ZSH_CUSTOM/macos.zsh
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+
 
