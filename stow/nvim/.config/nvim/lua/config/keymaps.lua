@@ -1,9 +1,5 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 
-local discipline = require("igor.discipline")
-
-discipline.cowboy()
-
 local keymap = vim.keymap
 local opts = { noremap = true, silent = true }
 
@@ -67,11 +63,5 @@ keymap.set("n", "<leader>r", function()
   require("igor.hsl").replaceHexWithHSL()
 end)
 
-if not vim.g.vscode then
-  keymap.set(
-    "n",
-    "<leader>sx",
-    require("telescope.builtin").resume,
-    { noremap = true, silent = true, desc = "Resume previous search" }
-  )
-end
+
+
